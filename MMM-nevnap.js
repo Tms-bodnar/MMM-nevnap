@@ -63,9 +63,10 @@ Module.register("MMM-nevnap", {
         var self = this;
         var retry = true;
         var today = moment();
-        var month = today.month();
-        var day = today.day();
+        var month = today.month() + 1;
+        var day = today.date();
         var param = "honap=" + month + "&nap=" + day;
+        Log.log(month + "," + day );
         var url = this.config.apiUrl + param;
         var Request = new XMLHttpRequest();
         Request.open("GET", url, true);

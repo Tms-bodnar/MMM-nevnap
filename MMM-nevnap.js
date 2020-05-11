@@ -10,6 +10,7 @@ Module.register("MMM-nevnap", {
         day = moment().date();
         names = [];
         subNames = [];
+        updated = false;
     },
     getDom: function () {
         var nameWrapper = document.createElement("div");
@@ -36,7 +37,11 @@ Module.register("MMM-nevnap", {
     },
     notificationReceived: function (notification, payload, sender) {
         var self = this;
-        if (notification === "DOM_OBJECTS_CREATED") {
+        if ( notification) {
+            Log.log(this + ", " + notification);
+        }
+        if (notification === "MODULE_DOM_CREATED") {
+            Log.log("created nameday");
             self.getNameDay( function (data) {
                         self.names = data.nev1;
                         self.subNames = data.nev2;
@@ -45,8 +50,9 @@ Module.register("MMM-nevnap", {
                         self.updateDom();
                     });
         }
-        if (notification === "CLOCK DATE") {
-            if ( self.day != payload ) {
+        if (notification === "CLOCK_HOUR") {
+            if ( payload === 0 && !self.updated ) {
+                Log.log("getNameday called");
                 self.getNameDay( function (data) {
                         self.names = data.nev1;
                         self.subNames = data.nev2;
@@ -54,6 +60,10 @@ Module.register("MMM-nevnap", {
                         Log.log(self.subNames);
                         self.updateDom();
                     });
+                self.updated = true;
+            }
+            if ( payload != 0 ) {
+                self.updated = false;
             }
         }
     },

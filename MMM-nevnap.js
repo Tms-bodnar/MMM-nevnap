@@ -42,41 +42,39 @@ Module.register("MMM-nevnap", {
         }
         if (notification === "MODULE_DOM_CREATED") {
             Log.log("created nameday");
-            self.getNameDay( function (data) {
+            self.getNameDay(function (data) {
                         self.names = data.nev1;
                         self.subNames = data.nev2;
-                        Log.log(self.names);
-                        Log.log(self.subNames);
                         self.updateDom();
                     });
-        }
-        if (notification === "CLOCK_HOUR") {
-            if ( payload === 0 && !self.updated ) {
-                Log.log("getNameday called");
-                self.getNameDay( function (data) {
-                        self.names = data.nev1;
-                        self.subNames = data.nev2;
-                        Log.log(self.names);
-                        Log.log(self.subNames);
-                        self.updateDom();
-                    });
-                self.updated = true;
-            }
-            if ( payload != 0 ) {
-                self.updated = false;
-            }
+            self.getMidnight();          
         }
     },
     socketNotificationReceived: function () {},
     
+    getMidnight: function(){ 
+        
+        setInterval( () => {
+            var self = this;
+            var h = moment().hour();
+            if ( h === 0 ){
+                self.getNameDay(function (data) {
+                        self.names = data.nev1;
+                        self.subNames = data.nev2;
+                        self.updateDom();
+                    });
+            }
+        }, 1000*60);
+     },
+    
     getNameDay: function(callback) {
+        console.log("getnameday");
         var self = this;
         var retry = true;
         var today = moment();
         var month = today.month() + 1;
         var day = today.date();
         var param = "honap=" + month + "&nap=" + day;
-        Log.log(month + "," + day );
         var url = this.config.apiUrl + param;
         var Request = new XMLHttpRequest();
         Request.open("GET", url, true);

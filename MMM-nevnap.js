@@ -57,14 +57,14 @@ Module.register("MMM-nevnap", {
         setInterval( () => {
             var self = this;
             var h = moment().hour();
-            if ( h === 0 ){
+            if ( h === 0){
                 self.getNameDay(function (data) {
                         self.names = data.nev1;
                         self.subNames = data.nev2;
                         self.updateDom();
                     });
             }
-        }, 1000*60);
+        }, 1000*60*60);
      },
     
     getNameDay: function(callback) {

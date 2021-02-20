@@ -1,6 +1,6 @@
 Module.register("MMM-nevnap", {
     defaults: {
-        apiUrl: "https://cors-anywhere.herokuapp.com/https://nevnap.xsak.hu/json.php?",
+        apiUrl: "https://cors.bridged.cc/https://nevnap.xsak.hu/json.php?",
         retryDelay: 10000
     },
     getScripts: function () {
